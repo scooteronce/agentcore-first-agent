@@ -55,6 +55,15 @@ terminal:
 agentcore invoke --runtime agent --local --port NNNN --payload '{"prompt": "Any AWS incidents right now?"}'
 ```
 
+## Run the tests
+
+The agent has a pytest suite for payload parsing, the health-check tool, and memory. You can simply run them by going into the app/agent directory and running them.
+
+```bash
+cd app/agent
+uv run pytest
+```
+
 ## Deploy
 
 ```bash

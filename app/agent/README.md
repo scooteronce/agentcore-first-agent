@@ -55,6 +55,26 @@ Command Prompt, or `.\.venv\Scripts\activate.ps1` in Windows PowerShell.
 
 `agentcore dev` will start a local server on 0.0.0.0:8080.
 
+## Tests
+
+A pytest suite lives in `tests/`. It needs no AWS credentials or network access — the
+health feed is mocked and the memory session manager is tested against patched module
+state:
+
+```bash
+uv run pytest
+```
+
+- `tests/test_parse.py` — `parse_payload` payload handling and `_strip_trailing_tool_use`
+  edge cases (trailing tool-use messages, validation errors).
+- `tests/test_check_aws_health.py` — the health tool against mocked UTF-16 feed data:
+  region filtering (matches the region code in `arn`/`service`; `region_name` holds a
+  human label like "UAE"), latest-update selection, and fetch-failure handling.
+- `tests/test_memory_session.py` — returns `None` without `MEMORY_AGENTMEMORY_ID`, and
+  builds per-actor retrieval namespaces when configured.
+
+pytest is a dev dependency (`uv sync` installs it).
+
 # Deployment
 
 After providing credentials, `agentcore deploy` will deploy your project into Amazon Bedrock AgentCore.
