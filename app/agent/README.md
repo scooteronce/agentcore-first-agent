@@ -65,8 +65,18 @@ state:
 uv run pytest
 ```
 
+For a coverage report (pytest-cov; `.coveragerc` excludes only the `__main__` guard):
+
+```bash
+uv run pytest tests/ --cov=main --cov=parse --cov=model --cov=memory --cov-report=term-missing
+```
+
 - `tests/test_parse.py` — `parse_payload` payload handling and `_strip_trailing_tool_use`
   edge cases (trailing tool-use messages, validation errors).
+- `tests/test_main.py` — `_get_agent` wiring and lru_cache reuse, and the streaming
+  entrypoint end to end with a mocked agent: event filtering, session/actor fallbacks,
+  and invalid-payload errors.
+- `tests/test_load_model.py` — `load_model` pins the expected Bedrock model ID.
 - `tests/test_check_aws_health.py` — the health tool against mocked UTF-16 feed data:
   region filtering (matches the region code in `arn`/`service`; `region_name` holds a
   human label like "UAE"), latest-update selection, and fetch-failure handling.
